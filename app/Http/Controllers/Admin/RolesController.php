@@ -58,6 +58,8 @@ class RolesController extends Controller
         $permissions = $request->input('permission') ? $request->input('permission') : [];
         $role->givePermissionTo($permissions);
 
+        session()->flash('success', 'Role create successfully');
+
         return redirect()->route('roles.index');
     }
 
@@ -105,6 +107,8 @@ class RolesController extends Controller
         $permissions = $request->input('permission') ? $request->input('permission') : [];
         $role->syncPermissions($permissions);
 
+        session()->flash('success', 'Role update successfully');
+
         return redirect()->route('roles.index');
     }
 
@@ -121,6 +125,8 @@ class RolesController extends Controller
         }
 
         $role->delete();
+
+        session()->flash('success', 'Role Delete successfully');
 
         return redirect()->route('roles.index');
     }

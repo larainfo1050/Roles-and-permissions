@@ -53,9 +53,13 @@ class UsersController extends Controller
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-        $user = User::create($request->all());
+        $data = $request->all();
+        $data['password'] = bcrypt($data['password']);
+        $user = User::create($data);
         $roles = $request->input('roles') ? $request->input('roles') : [];
         $user->assignRole($roles);
+
+        session()->flash('success', 'User create successfully');
 
         return redirect()->route('users.index');
     }
@@ -104,6 +108,8 @@ class UsersController extends Controller
         $roles = $request->input('roles') ? $request->input('roles') : [];
         $user->syncRoles($roles);
 
+        session()->flash('success', 'User update successfully');
+
         return redirect()->route('users.index');
     }
 
@@ -120,6 +126,8 @@ class UsersController extends Controller
         }
 
         $user->delete();
+
+        session()->flash('success', 'User delete successfully');
 
         return redirect()->route('users.index');
     }

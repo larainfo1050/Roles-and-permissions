@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePermissionsRequest;
+use App\Http\Requests\UpdatePermissionsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
@@ -49,6 +50,8 @@ class PermissionsController extends Controller
         }
         Permission::create($request->all());
 
+        session()->flash('success', 'Permission create successfully');
+
         return redirect()->route('permissions.index');
     }
 
@@ -85,13 +88,15 @@ class PermissionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Permission $permission)
+    public function update(UpdatePermissionsRequest $request, Permission $permission)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
 
         $permission->update($request->all());
+
+        session()->flash('success', 'Permission update successfully');
 
         return redirect()->route('permissions.index');
     }
@@ -109,6 +114,8 @@ class PermissionsController extends Controller
         }
 
         $permission->delete();
+
+        session()->flash('success', 'Permission update successfully');
 
         return redirect()->route('permissions.index');
     }
